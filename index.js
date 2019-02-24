@@ -1,4 +1,5 @@
 const {graphql, GraphQLSchema, GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLList } = require("graphql");
+const axios = require('axios')
 
 const Pokemon = new GraphQLObjectType({
     name: "UserType",
@@ -20,13 +21,13 @@ const PokemonSchema = new GraphQLSchema({
 
 const Resolvers = {
     pokemon() {
-        return {
-            name: "Ditto",
-            weight: 50,
-            abilities: ["this", "ability"]
-        }
+        const apiCall = axios.get('https://pokeapi.co/api/v2/pokemon/pikachu/')
+         .then(res => res.data)
+        
+        return apiCall
     }
 }
+
 
 const Query = `
     query {
