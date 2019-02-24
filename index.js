@@ -1,38 +1,42 @@
-const {graphql, GraphQLSchema, GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLInt, GraphQLList } = require("graphql");
-const axios = require('axios')
+const {graphql, GraphQLSchema, GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLList } = require("graphql");
 
-const User = new GraphQLObjectType({
+const Pokemon = new GraphQLObjectType({
     name: "UserType",
     fields: {
-        name: {type: GraphQLNonNull(GraphQLString)},
-        surname: {type: GraphQLNonNull(GraphQLString)}
+        name: {type: GraphQLString},
+        weight: {type: GraphQLInt},
+        abilities: {type: GraphQLList(GraphQLString)}
     }
 })
 
-const Schema = new GraphQLSchema({
+const PokemonSchema = new GraphQLSchema({
     query: new GraphQLObjectType({
         name: "QueryType",
         fields: {
-                user: { type: User }
-            }
-        })
+            pokemon: { type: Pokemon }
+        }
     })
-    const Resolvers = {
-        user() {
-            return {
-                name: "First Name",
-                surname: "Surname"
-            }
+})
+
+const Resolvers = {
+    pokemon() {
+        return {
+            name: "Ditto",
+            weight: 50,
+            abilities: ["this", "ability"]
         }
     }
+}
 
 const Query = `
     query {
-        user {
+        pokemon {
             name
+            weight
+            abilities
         }
     }
 `;
 
-graphql(Schema,Query,Resolvers)
+graphql(PokemonSchema,Query,Resolvers)
     .then(res => console.log(res))
